@@ -1,10 +1,25 @@
 
+
+using Microsoft.EntityFrameworkCore;
+using NewEpsepar.Infrastructure;
+using NewEpsepar.Application;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configuración de EF Core y DbContext
+builder.Services.AddDbContext<EpseparDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    ));
+
+// Registrar repositorio y servicio de usuario
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<UsuarioService>();
 
 var app = builder.Build();
 
@@ -35,6 +50,22 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+// Nuevo endpoint: crear usuario
+app.MapPost("/usuarios", (CrearUsuarioCommand cmd, UsuarioService usuarioService, IUsuarioRepository repo) =>
+{
+    var usuario = usuarioService.CrearUsuario(cmd);
+    repo.Add(usuario);
+    return Results.Created($"/usuarios/{usuario.Id}", usuario);
+})
+.WithName("CrearUsuario");
+
+// Nuevo endpoint: listar usuarios
+app.MapGet("/usuarios", (IUsuarioRepository repo) =>
+{
+    return repo.GetAll();
+})
+.WithName("ListarUsuarios");
 
 app.Run();
 
