@@ -2,6 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using NewEpsepar.Infrastructure;
+using NewEpsepar.Infrastructure.Repositories;
+using NewEpsepar.Domain.Interfaces;
+using NewEpsepar.Application.Usuarios;
 using NewEpsepar.Application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,18 +55,24 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast");
 
 // Nuevo endpoint: crear usuario
-app.MapPost("/usuarios", (CrearUsuarioCommand cmd, UsuarioService usuarioService, IUsuarioRepository repo) =>
+app.MapPost("/usuarios", async (CrearUsuarioCommand cmd, UsuarioService usuarioService) =>
 {
-    var usuario = usuarioService.CrearUsuario(cmd);
-    repo.Add(usuario);
+    var usuario = new NewEpsepar.Domain.Usuario
+    {
+        Nombre = cmd.Nombre,
+        Email = cmd.Email,
+        Activo = true
+    };
+    await usuarioService.CrearUsuarioAsync(usuario);
     return Results.Created($"/usuarios/{usuario.Id}", usuario);
 })
 .WithName("CrearUsuario");
 
 // Nuevo endpoint: listar usuarios
-app.MapGet("/usuarios", (IUsuarioRepository repo) =>
+app.MapGet("/usuarios", async (IUsuarioRepository repo) =>
 {
-    return repo.GetAll();
+    var usuarios = await repo.GetAllAsync();
+    return Results.Ok(usuarios);
 })
 .WithName("ListarUsuarios");
 

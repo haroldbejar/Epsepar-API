@@ -34,19 +34,23 @@ namespace NewEpsepar.Infrastructure.Repositories
             return await _dbSet.Where(predicate).ToListAsync();
         }
 
-        public virtual async Task AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public virtual void Update(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public virtual void Delete(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }
