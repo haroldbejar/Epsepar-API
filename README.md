@@ -1,5 +1,7 @@
 # NewEpsepar
 
+Prueba de activación de workflow CI/CD con GitHub Actions (31/03/2026).
+
 Solución base creada bajo Clean Architecture (.NET 8).
 
 ## Estructura
