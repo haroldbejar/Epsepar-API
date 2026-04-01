@@ -12,10 +12,29 @@ namespace NewEpsepar.Application.Beneficiarios
             _beneficiarioRepository = beneficiarioRepository;
         }
 
+        public async Task<IEnumerable<Beneficiario>> GetAllAsync()
+        {
+            return await _beneficiarioRepository.GetAllAsync();
+        }
+
         public async Task<Beneficiario?> GetByIdAsync(int id)
         {
             return await _beneficiarioRepository.GetByIdAsync(id);
         }
-        // Métodos CRUD adicionales aquí...
+
+        public async Task<Beneficiario> AddAsync(Beneficiario beneficiario)
+        {
+            return await _beneficiarioRepository.AddAsync(beneficiario);
+        }
+
+        public async Task UpdateAsync(Beneficiario beneficiario)
+        {
+            await _beneficiarioRepository.UpdateAsync(beneficiario);
+        }
+
+        public async Task DeleteAsync(Beneficiario beneficiario)
+        {
+            await _beneficiarioRepository.DeleteAsync(beneficiario);
+        }
     }
 }

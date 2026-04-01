@@ -12,10 +12,29 @@ namespace NewEpsepar.Application.Empleados
             _empleadoRepository = empleadoRepository;
         }
 
+        public async Task<IEnumerable<Empleado>> GetAllAsync()
+        {
+            return await _empleadoRepository.GetAllAsync();
+        }
+
         public async Task<Empleado?> GetByIdAsync(int id)
         {
             return await _empleadoRepository.GetByIdAsync(id);
         }
-        // Métodos CRUD adicionales aquí...
+
+        public async Task<Empleado> AddAsync(Empleado empleado)
+        {
+            return await _empleadoRepository.AddAsync(empleado);
+        }
+
+        public async Task UpdateAsync(Empleado empleado)
+        {
+            await _empleadoRepository.UpdateAsync(empleado);
+        }
+
+        public async Task DeleteAsync(Empleado empleado)
+        {
+            await _empleadoRepository.DeleteAsync(empleado);
+        }
     }
 }

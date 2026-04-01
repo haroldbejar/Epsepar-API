@@ -12,10 +12,29 @@ namespace NewEpsepar.Application.Sedes
             _sedeRepository = sedeRepository;
         }
 
+        public async Task<IEnumerable<Sede>> GetAllAsync()
+        {
+            return await _sedeRepository.GetAllAsync();
+        }
+
         public async Task<Sede?> GetByIdAsync(int id)
         {
             return await _sedeRepository.GetByIdAsync(id);
         }
-        // Métodos CRUD adicionales aquí...
+
+        public async Task<Sede> AddAsync(Sede sede)
+        {
+            return await _sedeRepository.AddAsync(sede);
+        }
+
+        public async Task UpdateAsync(Sede sede)
+        {
+            await _sedeRepository.UpdateAsync(sede);
+        }
+
+        public async Task DeleteAsync(Sede sede)
+        {
+            await _sedeRepository.DeleteAsync(sede);
+        }
     }
 }
